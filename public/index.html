@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineList | Movie Watchlist</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home"><span class="brand-mark" aria-hidden="true">✦</span> CineList</a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="#discover">Discover</a>
+      <a href="#genre-browser">Trending</a>
+      <a href="#collection">My Watchlist</a>
+    </nav>
+    <form id="headerSearchForm" class="header-search" role="search">
+      <label class="visually-hidden" for="headerSearchInput">Search movies</label>
+      <input id="headerSearchInput" type="search" placeholder="Search movies">
+      <button type="submit" aria-label="Search movies"><span aria-hidden="true">⌕</span></button>
+    </form>
+    <a class="header-list-link" href="#collection">My list <span id="headerCount">0</span></a>
+    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to light mode" title="Switch theme">
+      <span class="theme-toggle-icon" aria-hidden="true">☾</span>
+    </button>
+  </header>
+
+  <main class="container" id="home">
+    <section class="discovery-hero" id="discover">
+      <div class="hero-copy">
+        <p class="eyebrow">CINEMATIC DISCOVERY</p>
+        <h1>Discover movies worth watching.</h1>
+        <p class="hero-summary">Search by title, explore new picks, and keep the movies you want to watch in one place.</p>
+        <form id="searchForm" class="search-bar" role="search">
+          <span class="search-bar-icon" aria-hidden="true">⌕</span>
+          <label class="visually-hidden" for="searchInput">Search by title</label>
+          <input id="searchInput" type="search" autocomplete="off"
+            placeholder="Search movies, cast, or genres" required>
+          <button type="submit" class="search-bar-submit">
+            <span class="search-button-label">Search</span>
+            <span class="search-bar-key" aria-hidden="true">↵</span>
+          </button>
+        </form>
+        <div class="hero-tools">
+          <div class="quick-picks" aria-label="Quick movie searches">
+            <span class="quick-picks-label">QUICK PICKS</span>
+            <div id="quickPicks"></div>
+          </div>
+          <div class="hero-actions">
+            <a class="hero-watchlist" href="#collection">
+              <span class="hero-watchlist-icon" aria-hidden="true">☰</span>
+              Watchlist <span id="heroCount">0</span>
+            </a>
+            <span class="live-search"><span aria-hidden="true"></span> Live search</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-showcase" aria-label="Featured movies" aria-roledescription="carousel">
+        <p class="eyebrow">FEATURED MOVIES</p>
+        <div class="featured-movie" id="featuredMovie">
+          <div class="featured-empty">Loading featured movies...</div>
+        </div>
+        <div class="hero-carousel-footer">
+          <div class="hero-nav">
+            <button type="button" id="featuredPrev" class="hero-nav-btn" aria-label="Previous featured movie">‹</button>
+            <button type="button" id="featuredNext" class="hero-nav-btn" aria-label="Next featured movie">›</button>
+          </div>
+          <div class="hero-indicators" id="featuredIndicators" aria-label="Choose featured movie"></div>
+          <span id="featuredCount" aria-live="polite">00 / 00</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Watchlist overview">
+      <article class="stat-card">
+        <span>🎬 Total Movies</span>
+        <strong id="totalCount">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>⭐ Average Rating</span>
+        <strong id="averageRating">--</strong>
+      </article>
+      <article class="stat-card">
+        <span>✅ Watched Movies</span>
+        <strong id="watchedCount">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>❤️ Favorite Movies</span>
+        <strong id="favoriteCount">0</strong>
+      </article>
+    </section>
+
+    <section class="genre-browser" id="genre-browser" aria-label="Browse by genre">
+      <div class="genre-heading">
+        <div>
+          <p class="eyebrow">TRENDING NOW, ORGANIZED BY GENRE</p>
+          <h2>Find your kind of movie</h2>
+        </div>
+        <p>Choose a category to narrow your watchlist.</p>
+      </div>
+      <div class="genre-filters" id="genreFilters" role="group" aria-label="Filter watchlist by genre"></div>
+    </section>
+
+    <div id="message" class="message hidden" role="status"></div>
+    <div id="searchResults" class="movie-grid search-results" aria-live="polite"></div>
+
+    <section class="watchlist-section" id="collection">
+      <div class="watchlist-heading">
+        <div>
+          <p class="eyebrow">YOUR COLLECTION</p>
+          <h2>Your watchlist</h2>
+          <p>Saved picks, ready when you are.</p>
+        </div>
+        <span class="count-pill"><strong id="collectionCount">0</strong> saved titles</span>
+      </div>
+
+      <form id="addForm" class="add-form">
+        <input id="movieTitle" placeholder="Movie title" required>
+        <input id="movieGenre" placeholder="Genre" required>
+        <input id="movieYear" type="number" placeholder="Year"
+          min="1888" max="2100" required>
+        <button type="submit">Add Movie</button>
+      </form>
+
+      <div class="filter-row">
+        <button type="button" id="playAllTrailers" class="play-all-trailers" title="Play every trailer in your watchlist">
+          <span aria-hidden="true">▶</span> Play all trailers
+        </button>
+
+        <input id="filterInput" type="search"
+          placeholder="Filter by movie title...">
+
+        <select id="statusFilter">
+          <option value="all">All movies</option>
+          <option value="unwatched">To Watch</option>
+          <option value="watched">Watched</option>
+          <option value="favorites">Favorites</option>
+        </select>
+
+        <select id="sortSelect">
+          <option value="newest">Recently added</option>
+          <option value="title">Title A–Z</option>
+          <option value="year">Year: newest first</option>
+        </select>
+      </div>
+
+      <div id="watchlist" class="movie-grid"></div>
+    </section>
+  </main>
+
+  <dialog id="detailsDialog">
+    <div id="detailsContent" class="dialog-content"></div>
+    <div class="dialog-actions">
+      <button type="button" class="secondary"
+        id="closeDetails">Close</button>
+    </div>
+  </dialog>
+
+  <dialog id="trailerDialog" class="trailer-dialog" aria-labelledby="trailerDialogTitle">
+    <div class="trailer-shell">
+      <div class="trailer-head">
+        <div>
+          <p class="eyebrow">TRAILER THEATRE</p>
+          <h2 id="trailerDialogTitle">Loading trailers...</h2>
+          <p id="trailerDialogMeta" class="trailer-dialog-meta"></p>
+        </div>
+        <button type="button" class="trailer-close" id="closeTrailerDialog" aria-label="Close trailer player">✕</button>
+      </div>
+      <div class="trailer-stage" id="trailerStage">
+        <div class="trailer-loading"><span aria-hidden="true"></span>Finding trailers...</div>
+      </div>
+      <div class="trailer-controls">
+        <button type="button" class="secondary" id="trailerPrev">‹ Previous</button>
+        <span id="trailerProgress" class="trailer-progress" aria-live="polite"></span>
+        <button type="button" class="secondary" id="trailerNext">Next ›</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="confirmDialog" class="confirm-dialog" aria-labelledby="confirmTitle">
+    <div class="confirm-shell">
+      <span class="confirm-icon" aria-hidden="true">🗑</span>
+      <h2 id="confirmTitle">Remove from watchlist?</h2>
+      <p id="confirmMessage">Are you sure you want to remove this movie?</p>
+      <div class="confirm-actions">
+        <button type="button" class="secondary" id="confirmCancel">Cancel</button>
+        <button type="button" class="danger" id="confirmAccept">Remove</button>
+      </div>
+    </div>
+  </dialog>
+
+  <footer>
+    <p><strong>CineList</strong> · A focused space for movie discovery and your saved queue.</p>
+  </footer>
+
+  <script>
+    // Apply the saved theme before first paint to avoid a flash.
+    (function () {
+      try {
+        var saved = localStorage.getItem("cinelist-theme");
+        if (saved === "light" || saved === "dark") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) { /* storage unavailable - keep default dark */ }
+    })();
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

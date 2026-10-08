@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Secrets
+.env
+
+# Runtime data (regenerated on first run)
+featured.json
+movies.json
+
+# Logs
+*.log
